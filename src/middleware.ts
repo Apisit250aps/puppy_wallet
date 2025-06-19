@@ -4,8 +4,12 @@ import { NextResponse } from 'next/server'
 
 const { auth } = NextAuth(authConfig)
 export default auth(async (req: NextAuthRequest) => {
-  // Your custom middleware logic goes here
-  console.log(req.auth)
+  const pathname = req.nextUrl.pathname
+  if (pathname.startsWith('/login')) {
+    if (req.auth) {
+      return NextResponse.redirect(new URL('/', req.nextUrl))
+    }
+  }
   return NextResponse.next()
 })
 
