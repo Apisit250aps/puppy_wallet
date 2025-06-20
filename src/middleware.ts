@@ -3,6 +3,7 @@ import authConfig from './auth.config'
 import { NextResponse } from 'next/server'
 
 const { auth } = NextAuth(authConfig)
+
 export default auth(async (req: NextAuthRequest) => {
   const pathname = req.nextUrl.pathname
   if (pathname.startsWith('/login')) {
@@ -10,6 +11,13 @@ export default auth(async (req: NextAuthRequest) => {
       return NextResponse.redirect(new URL('/', req.nextUrl))
     }
   }
+
+  if (pathname.startsWith('/dashboard')) {
+    if (!req.auth) {
+      return NextResponse.redirect(new URL('/', req.nextUrl))
+    }
+  }
+  
   return NextResponse.next()
 })
 
